@@ -11,12 +11,10 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-
     const int scale = 1 << 10;
-    const int modSpace = 1 << 16;
 
     // Initialize the matrix and vector
-    std::vector<std::vector<double> > matrix(scale/size, vector<double>(scale));
+    std::vector<std::vector<double>> matrix(scale / size, vector<double>(scale));
     std::vector<double> vector(scale);
     std::vector<double> result(scale, 0.0);
 
@@ -25,12 +23,15 @@ int main(int argc, char* argv[]) {
     int start_row = rank * local_rows;
     int end_row = (rank == size - 1) ? scale : start_row + local_rows;
 
-    // initialize the matrix with its rank relevant data
+    // Initialize the matrix with its rank relevant data
     for (int i = 0; i < end_row - start_row; i++) {
         for (int j = 0; j < scale; j++) {
             matrix[i][j] = (i + start_row == j) ? 1.0 : 0.0;
         }
     }
+
+    // Timing variables
+    double start_time, end_time;
     
     // Initialize the vector in the root process
     if (rank == 0) {
@@ -38,44 +39,38 @@ int main(int argc, char* argv[]) {
             vector[i] = i + 1.0;
         }
     }
+    
+    // Start timing the vector broadcast
+    start_time = MPI_Wtime();
+
     // Broadcast the vector to all processes
     MPI_Bcast(vector.data(), scale, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Barrier(MPI_COMM_WORLD);
 
-    // // print the broadcasted vector
-    // cout << "Rank " << rank << " received the vector: ";
-    // for (int i = 0; i < scale; i++) {
-    //     cout << vector[i] << " ";
-    // }
-    // cout << endl;
-    // print the generated matrix
-    // cout << "Rank " << rank << " generated the matrix: " << endl;
-    // for (int i = 0; i < end_row - start_row; i++) {
-    //     for (int j = 0; j < scale; j++) {
-    //         cout << matrix[i][j] << " ";
-    //     }
-    //     cout << "N";
-    // }
-    // cout << endl;
+    // Stop timing the vector broadcast
+    end_time = MPI_Wtime();
+
+    if (rank == 0) {
+        cout << "Vector Broadcast Time: " << end_time - start_time << " seconds" << endl;
+    }
+
+    // Timing the matrix-vector multiplication
+    start_time = MPI_Wtime();
 
     // Calculate the local portion of the result
     for (int i = 0; i < end_row - start_row; i++) {
         for (int j = 0; j < scale; j++) {
-            result[i+(scale/size)*rank] += matrix[i][j] * vector[j];
-            // result[i+(scale/size)*rank] = fmod(result[i], modSpace);
+            result[i + (scale / size) * rank] += matrix[i][j] * vector[j];
         }
     }
 
     // Gather the results from all processes to the root process
     MPI_Gather(result.data() + start_row, local_rows, MPI_DOUBLE, result.data(), local_rows, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Barrier(MPI_COMM_WORLD);
-    // Print the result in the root process
+
+    // Stop timing the matrix-vector multiplication
+    end_time = MPI_Wtime();
+
     if (rank == 0) {
-        cout << "Result vector:" << endl;
-        for (int i = 0; i < scale; i++) {
-            cout << result[i] << " ";
-        }
-        cout << endl;
+        cout << "Matrix-Vector Multiplication Time: " << end_time - start_time << " seconds" << endl;
     }
 
     MPI_Finalize();
