@@ -1,0 +1,3 @@
+/Users/simonandersen/Desktop/INF339A/matrix_verctor/build/debug/CMakeFiles/mat_vec_mult.dir
+/Users/simonandersen/Desktop/INF339A/matrix_verctor/build/debug/CMakeFiles/edit_cache.dir
+/Users/simonandersen/Desktop/INF339A/matrix_verctor/build/debug/CMakeFiles/rebuild_cache.dir
