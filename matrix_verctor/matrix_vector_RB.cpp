@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Timing variables
-    double start_time, end_time;
+    double start_time_total, end_time_total, start_time_bcast_comm, end_time_bcast_comm, start_time_gather_comm, end_time_gather_comm;
     
     // Initialize the vector in the root process
     if (rank == 0) {
@@ -41,20 +41,19 @@ int main(int argc, char* argv[]) {
     }
     
     // Start timing the vector broadcast
-    start_time = MPI_Wtime();
+    start_time_total = start_time_bcast_comm = MPI_Wtime();
 
     // Broadcast the vector to all processes
     MPI_Bcast(vector.data(), scale, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
+    MPI_Barrier(MPI_COMM_WORLD);
     // Stop timing the vector broadcast
-    end_time = MPI_Wtime();
+    end_time_bcast_comm = MPI_Wtime();
 
     if (rank == 0) {
-        cout << "Vector Broadcast Time: " << end_time - start_time << " seconds" << endl;
+        cout << "Vector Broadcast Time: " << end_time_bcast_comm - start_time_bcast_comm << " seconds" << endl;
     }
 
     // Timing the matrix-vector multiplication
-    start_time = MPI_Wtime();
 
     // Calculate the local portion of the result
     for (int i = 0; i < end_row - start_row; i++) {
@@ -62,15 +61,16 @@ int main(int argc, char* argv[]) {
             result[i + (scale / size) * rank] += matrix[i][j] * vector[j];
         }
     }
-
+    start_time_gather_comm = MPI_Wtime();
     // Gather the results from all processes to the root process
     MPI_Gather(result.data() + start_row, local_rows, MPI_DOUBLE, result.data(), local_rows, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // Stop timing the matrix-vector multiplication
-    end_time = MPI_Wtime();
+    end_time_total = end_time_gather_comm = MPI_Wtime();
 
     if (rank == 0) {
-        cout << "Matrix-Vector Multiplication Time: " << end_time - start_time << " seconds" << endl;
+        cout << "Gather Communication Time: " << end_time_gather_comm - start_time_gather_comm << " seconds" << endl;
+        cout << "Matrix-Vector Multiplication Time: " << end_time_total - start_time_total << " seconds" << endl;
     }
 
     MPI_Finalize();
