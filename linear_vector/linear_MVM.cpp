@@ -13,6 +13,7 @@ int main(int argc, char* argv[]) {
 	std::vector<std::vector<double>> matrix(scale, vector<double>(scale));
 	std::vector<double> vector(scale);
 	std::vector<double> result(scale, 0.0);
+	double start_time, end_time;
 
 	// Initialize the matrix with its rank relevant data
 	for (int i = 0; i < scale; i++) {
@@ -27,7 +28,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Start timing the matrix-vector multiplication
-	double start_time = MPI_Wtime();
+	start_time = MPI_Wtime();
 
 	// Calculate the local portion of the result
 	for (int i = 0; i < scale; i++) {
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Stop timing the matrix-vector multiplication
-	double end_time = MPI_Wtime();
+	end_time = MPI_Wtime();
 
 	cout << "Matrix-Vector Multiplication Time: " << end_time - start_time << " seconds" << endl;
 
