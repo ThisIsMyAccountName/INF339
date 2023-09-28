@@ -39,22 +39,14 @@ int main(int argc, char* argv[]) {
             vector[i] = i + 1.0;
         }
     }
-    
+    MPI_Barrier(MPI_COMM_WORLD);
     // Start timing the vector broadcast
-
     start_time = MPI_Wtime();
     // Broadcast the vector to all processes
     MPI_Bcast(vector.data(), scale, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Barrier(MPI_COMM_WORLD);
     // Stop timing the vector broadcast
-    end_time = MPI_Wtime();
-
-    if (rank == 0) {
-        cout << "Vector Broadcast Time: " << end_time - start_time << " seconds" << endl;
-    }
 
     // Timing the matrix-vector multiplication
-    start_time = MPI_Wtime();
     
     // Calculate the local portion of the result
     for (int i = 0; i < end_row - start_row; i++) {
@@ -63,23 +55,14 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    end_time = MPI_Wtime();
 
-    if (rank == 0) {
-        cout << "Matrix-Vector Multiplication Time: " << end_time - start_time << " seconds" << endl;
-    }
-
-    MPI_Barrier(MPI_COMM_WORLD);
-    start_time = MPI_Wtime();
     // Gather the results from all processes to the root process
     MPI_Gather(result.data() + start_row, local_rows, MPI_DOUBLE, result.data(), local_rows, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Barrier(MPI_COMM_WORLD);
-    end_time = MPI_Wtime();
     // Stop timing the matrix-vector multiplication
-
+	end_time = MPI_Wtime();
 
     if (rank == 0) {
-        cout << "Gather Communication Time: " << end_time - start_time << " seconds" << endl;
+        cout << "Total time: " << end_time - start_time << " seconds" << endl;
     }
 
     MPI_Finalize();

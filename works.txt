@@ -8,3 +8,7 @@ cd ../..
 cmake --build build/debug/
 sbatch jobscript
 
+squeue -u wep014
+scancel <jobid>
+
+scp -r wep014@dnat.simula.no:~/INF339/matrix_verctor/ ~/Desktop/
