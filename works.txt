@@ -16,3 +16,4 @@ scancel <jobid>
 scp -r -P 60441 wep014@dnat.simula.no:~/INF339/linear_vector/res/ ~/Desktop/INF339A/results
 scp -r -P 60441 wep014@dnat.simula.no:~/INF339/matrix_verctor/8/16/ ~/Desktop/INF339A/results
 scp -r -P 60441 wep014@dnat.simula.no:~/INF339/matrix_verctor/8/8/ ~/Desktop/INF339A/results
+scp -r -P 60441 wep014@dnat.simula.no:~/INF339/matrix_verctor/1 ~/Desktop/INF339A/results

@@ -15,5 +15,6 @@ for file in "$folder_path"/*; do
         # Run sbatch with the current file
         sbatch "$file"
         echo "Submitted job for $file"
+		sleep 1
     fi
 done
