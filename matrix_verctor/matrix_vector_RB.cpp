@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    const int scale = 1 << 10;
+    const int scale = 1 << 16;
 
     // Initialize the matrix and vector
     std::vector<std::vector<double>> matrix(scale / size, vector<double>(scale));
@@ -50,12 +50,12 @@ int main(int argc, char* argv[]) {
     end_time = MPI_Wtime();
 
     if (rank == 0) {
-        cout << "Vector Broadcast Time: " << end_time - start_time << " seconds" << endl;
+        cout << end_time - start_time << endl;
     }
 
     // Timing the matrix-vector multiplication
     start_time = MPI_Wtime();
-    
+
     // Calculate the local portion of the result
     for (int i = 0; i < end_row - start_row; i++) {
         for (int j = 0; j < scale; j++) {
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
     end_time = MPI_Wtime();
 
     if (rank == 0) {
-        cout << "Matrix-Vector Multiplication Time: " << end_time - start_time << " seconds" << endl;
+        cout << end_time - start_time << endl;
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
 
 
     if (rank == 0) {
-        cout << "Gather Communication Time: " << end_time - start_time << " seconds" << endl;
+        cout << end_time - start_time << endl;
     }
 
     MPI_Finalize();

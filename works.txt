@@ -2,12 +2,16 @@ ssh -AY2C wep014@dnat.simula.no -p 60441
 
 cd INF339/matrix_verctor/;module purge; module load cmake-3.17.2; module load boost-1.73.0; module load boost-mpi-1.73.0
 
+module purge; module load cmake-3.17.2; module load boost-1.73.0; module load boost-mpi-1.73.0
+
 in build/debug do cmake ../../
 cd ../..
 cmake --build build/debug/
 sbatch jobscript
 
 squeue -u wep014
+squeue -p rome16q
 scancel <jobid>
 
-scp -r wep014@dnat.simula.no:~/INF339/matrix_verctor/ ~/Desktop/
+scp -r -P 60441 wep014@dnat.simula.no:~/INF339/linear_vector/res/ ~/Desktop/INF339A/results
+scp -r -P 60441 wep014@dnat.simula.no:~/INF339/matrix_verctor/8/16/ ~/Desktop/INF339A/results

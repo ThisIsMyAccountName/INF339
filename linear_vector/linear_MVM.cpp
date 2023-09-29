@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 	// Stop timing the matrix-vector multiplication
 	end_time = MPI_Wtime();
 
-	cout << "Matrix-Vector Multiplication Time: " << end_time - start_time << " seconds" << endl;
+	cout << end_time - start_time << endl;
 
 	return 0;
 }
