@@ -39,18 +39,22 @@ int main(int argc, char* argv[]) {
             vector[i] = i + 1.0;
         }
     }
-    
+    double avg_time = 0.0;
     // Start timing the vector broadcast
-
-    start_time = MPI_Wtime();
-    // Broadcast the vector to all processes
-    MPI_Bcast(vector.data(), scale, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Barrier(MPI_COMM_WORLD);
-    // Stop timing the vector broadcast
-    end_time = MPI_Wtime();
+    // a loop of 100 to get a more accurate time
+    for (int i = 0; i < 100; i++) {
+        MPI_Barrier(MPI_COMM_WORLD);
+        start_time = MPI_Wtime();
+        // Broadcast the vector to all processes
+        MPI_Bcast(vector.data(), scale, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        MPI_Barrier(MPI_COMM_WORLD);
+        // Stop timing the vector broadcast
+        end_time = MPI_Wtime();
+        avg_time += end_time - start_time;
+    }
 
     if (rank == 0) {
-        cout << end_time - start_time << endl;
+        cout << avg_time / 100 << endl;
     }
 
     // Timing the matrix-vector multiplication
@@ -68,18 +72,20 @@ int main(int argc, char* argv[]) {
     if (rank == 0) {
         cout << end_time - start_time << endl;
     }
-
-    MPI_Barrier(MPI_COMM_WORLD);
-    start_time = MPI_Wtime();
-    // Gather the results from all processes to the root process
-    MPI_Gather(result.data() + start_row, local_rows, MPI_DOUBLE, result.data(), local_rows, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Barrier(MPI_COMM_WORLD);
-    end_time = MPI_Wtime();
-    // Stop timing the matrix-vector multiplication
+    int avg_time2 = 0.0;
+    for (int i = 0; i < 100; i++) {
+        MPI_Barrier(MPI_COMM_WORLD);
+        start_time = MPI_Wtime();
+        // Gather the results from all processes to the root process
+        MPI_Gather(result.data() + start_row, local_rows, MPI_DOUBLE, result.data(), local_rows, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        MPI_Barrier(MPI_COMM_WORLD);
+        end_time = MPI_Wtime();
+        avg_time2 += end_time - start_time;
+    }
 
 
     if (rank == 0) {
-        cout << end_time - start_time << endl;
+        cout << avg_time2 / 100 << endl;
     }
 
     MPI_Finalize();

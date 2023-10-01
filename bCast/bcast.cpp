@@ -53,6 +53,7 @@ int main(int argc, char* argv[]) {
         end_time = MPI_Wtime();
         total_time += end_time - start_time;
     }
+    
     if (rank == 0) {
         cout << total_time / 100 << endl;
     }

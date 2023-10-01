@@ -1,0 +1,9 @@
+[n056:1090132] mca_base_component_repository_open: unable to open mca_pml_ucx: libbfd-2.30-system.so: cannot open shared object file: No such file or directory (ignored)
+[n057:1083898] mca_base_component_repository_open: unable to open mca_pml_ucx: libbfd-2.30-system.so: cannot open shared object file: No such file or directory (ignored)
+[n058:1081483] mca_base_component_repository_open: unable to open mca_pml_ucx: libbfd-2.30-system.so: cannot open shared object file: No such file or directory (ignored)
+[n059:1078216] mca_base_component_repository_open: unable to open mca_pml_ucx: libbfd-2.30-system.so: cannot open shared object file: No such file or directory (ignored)
+[n056:1090132] mca_base_component_repository_open: unable to open mca_osc_ucx: libbfd-2.30-system.so: cannot open shared object file: No such file or directory (ignored)
+[n057:1083898] mca_base_component_repository_open: unable to open mca_osc_ucx: libbfd-2.30-system.so: cannot open shared object file: No such file or directory (ignored)
+[n058:1081483] mca_base_component_repository_open: unable to open mca_osc_ucx: libbfd-2.30-system.so: cannot open shared object file: No such file or directory (ignored)
+[n059:1078216] mca_base_component_repository_open: unable to open mca_osc_ucx: libbfd-2.30-system.so: cannot open shared object file: No such file or directory (ignored)
+Total time: 9.88986 seconds

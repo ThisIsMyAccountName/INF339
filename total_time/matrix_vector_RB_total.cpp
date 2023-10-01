@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    const int scale = 1 << 10;
+    const int scale = 1 << 16;
 
     // Initialize the matrix and vector
     std::vector<std::vector<double>> matrix(scale / size, vector<double>(scale));
